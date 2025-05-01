@@ -5,15 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e082ca3-3209-451f-af43-a6d11f6b4d24" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/GABrokerHelper.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main_gui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/split_excel_core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/main_gui.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/main_gui.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/warn-main_gui.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/warn-main_gui.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main_gui/xref-main_gui.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/main_gui/xref-main_gui.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/GABrokerHelper.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dist/GABrokerHelper.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/split_excel_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_excel_core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-A.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-A.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-B.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-B.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-C.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-C.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-D.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-D.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-E.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-E.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/999-32980216-F.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/splitted_excels/999-32980216-F.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splitted_excels/~$999-32980216-B.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +56,7 @@
     "Python.split_excel_gui.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true"
   }
 }]]></component>

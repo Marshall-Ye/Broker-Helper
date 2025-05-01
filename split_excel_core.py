@@ -4,10 +4,12 @@ Splits the workbook into 998-row chunks, applies column mapping / constants,
 drops fully-blank rows, widens column F, and saves files named <MAWB>-A.xlsx …
 """
 
+
 import os, sys
 from math import ceil
 import pandas as pd
 from openpyxl import load_workbook
+from openpyxl.styles import Font, Border, PatternFill, Alignment
 
 ROWS_PER_FILE = 998
 
@@ -95,29 +97,50 @@ def save_chunks(
         df: pd.DataFrame,
         out_dir: str,
         mawb: str,
-        rows_per_file: int = 998      # ← NEW PARAM (default 998)
+        rows_per_file: int = 998
 ) -> int:
+    """Split df, save XLSX files with plain, left-aligned headers."""
     os.makedirs(out_dir, exist_ok=True)
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     part_no = 0
 
-    # use rows_per_file instead of the global constant
-    for start in range(0, len(df), rows_per_file):          # ← CHANGED
+    plain_font   = Font(name="Calibri", size=11, bold=False)
+    empty_border = Border()
+    empty_fill   = PatternFill(fill_type=None)
+    left_align   = Alignment(horizontal="left", vertical="center")
+
+    for start in range(0, len(df), rows_per_file):
         chunk = df.iloc[start:start + rows_per_file].copy()
-        suffix = letters[part_no]
+        suffix  = letters[part_no]
         invoice = f"{mawb}-{suffix}"
         chunk["Invoice_No"] = invoice
 
-        path = os.path.join(out_dir, f"{invoice}.xlsx")
-        chunk.to_excel(path, index=False)
+        file_path = os.path.join(out_dir, f"{invoice}.xlsx")
+        chunk.to_excel(file_path, index=False)          # first write
 
-        wb = load_workbook(path)
-        wb.active.column_dimensions["F"].width = 20
-        wb.save(path); wb.close()
+        # ── reopen and format ──
+        wb = load_workbook(file_path)
+        ws = wb.active
 
+        # 1) plain, left-aligned header cells
+        for cell in ws[1]:
+            cell.font   = plain_font
+            cell.border = empty_border
+            cell.fill   = empty_fill
+            cell.alignment = left_align
+
+        # 2) set column A width to fit Invoice_No (max len + 2)
+        max_len = max(len(str(invoice)), len("Invoice_No")) + 2
+        ws.column_dimensions["A"].width = max_len
+
+        # 3) keep tariff column (F) wide enough
+        ws.column_dimensions["F"].width = 20
+
+        wb.save(file_path)
+        wb.close()
         part_no += 1
-    return part_no
 
+    return part_no
 
 # optional CLI
 if __name__ == "__main__":
