@@ -1,5 +1,5 @@
 """
-mid_fixer.py  –  fixes numeric part of MID_Code (column T)
+mid_fixer.py  –  fixes numeric part of MID_Code (column T)
 Adds helper columns:
     • MID_original  – original MID text
     • MID_flag      – True if numeric changed

@@ -1,8 +1,8 @@
 """
-GA Broker • Excel Splitter  (CustomTkinter GUI)
+GA Broker • Excel Splitter  (CustomTkinter GUI)
 ----------------------------------------------
 • Let user choose source Excel
-• Optional rows‑per‑file (default 499)
+• Optional rows‑per‑file (default 499)
 • Calls split_excel_core.save_chunks(...)
 • All output is written to ./splitted_excels
 """

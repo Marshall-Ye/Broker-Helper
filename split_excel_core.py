@@ -114,7 +114,7 @@ def save_chunks(df:pd.DataFrame, out_dir:str, mawb:str, rows:int=998) -> int:
             part += 1
 
     return part
-
+"""
 # ---------- CLI ----------
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -125,3 +125,4 @@ if __name__ == "__main__":
     mawb_root = get_mawb(src)
     parts = save_chunks(prepare_dataframe(src), dst, mawb_root)
     print(f"Done – {parts} file(s) written to '{dst}'.")
+"""
