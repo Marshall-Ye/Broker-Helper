@@ -93,58 +93,76 @@ def build_dataframe(src_path: str) -> pd.DataFrame:
 
 
 
-def save_chunks(
-        df: pd.DataFrame,
-        out_dir: str,
-        mawb: str,
-        rows_per_file: int = 998
-) -> int:
-    """Split df, save XLSX files with plain, left-aligned headers."""
+def save_chunks(df: pd.DataFrame, out_dir: str, mawb: str, rows: int = 998) -> int:
+    import string
+
     os.makedirs(out_dir, exist_ok=True)
-    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    part_list = []
-    for i in range(len(letters)):
-        for j in range(3):
-            part_list.append(letters[i]+str(j+1))
-    part_no = 0
 
-    plain_font   = Font(name="Calibri", size=11, bold=False)
-    empty_border = Border()
-    empty_fill   = PatternFill(fill_type=None)
-    left_align   = Alignment(horizontal="left", vertical="center")
+    part_list = [f"{letter}{i+1}" for letter in string.ascii_uppercase for i in range(3)]
 
-    for start in range(0, len(df), rows_per_file):
-        chunk = df.iloc[start:start + rows_per_file].copy()
-        suffix  = part_list[part_no]
-        invoice = f"{mawb}-{suffix}"
-        chunk["Invoice_No"] = invoice
+    # Load header sample to extract correct columns
+    sample_path = "./RealData/Header Sample.xlsx"
+    sample_wb = load_workbook(sample_path, read_only=True)
+    sample_ws = sample_wb.active
+    template_headers = [cell.value for cell in sample_ws[1] if cell.value]
+    sample_wb.close()
 
-        file_path = os.path.join(out_dir, f"{invoice}.xlsx")
-        chunk.to_excel(file_path, index=False)          # first write
+    master_txt = os.path.join(out_dir, f"MID_report_{mawb}.txt")
+    with open(master_txt, "w", encoding="utf-8") as rpt:
+        rpt.write("File\tRow\tOriginalMID\tFinalMID\tManufacturer\tAddress\n")
 
-        # ── reopen and format ──
-        wb = load_workbook(file_path)
-        ws = wb.active
+        part = 0
+        for start in range(0, len(df), rows):
+            chunk = df.iloc[start:start + rows].copy()
+            suffix = part_list[part]
+            invoice = f"{mawb}-{suffix}"
+            chunk["Invoice_No"] = invoice
 
-        # 1) plain, left-aligned header cells
-        for cell in ws[1]:
-            cell.font   = plain_font
-            cell.border = empty_border
-            cell.fill   = empty_fill
-            cell.alignment = left_align
+            # Fix MIDs
+            chunk = mid_fixer.fix_mids(chunk, mawb, suffix, out_dir)
 
-        # 2) set column A width to fit Invoice_No (max len + 2)
-        max_len = max(len(str(invoice)), len("Invoice_No")) + 2
-        ws.column_dimensions["A"].width = max_len
+            # Drop helper columns
+            for col in ["MID_flag", "MID_original"]:
+                if col in chunk.columns:
+                    chunk.drop(columns=col, inplace=True)
 
-        # 3) keep tariff column (F) wide enough
-        ws.column_dimensions["F"].width = 20
+            # Match template header exactly
+            chunk = chunk.reindex(columns=template_headers)
 
-        wb.save(file_path)
-        wb.close()
-        part_no += 1
+            # Report modified MIDs
+            for r, (_, row) in enumerate(chunk.iterrows(), start=2):
+                if "MID_flag" in row and row["MID_flag"]:
+                    rpt.write(f"{invoice}.xlsx\t{r}\t{row.get('MID_original', '')}\t"
+                              f"{row['MID_Code']}\t{row['Manufacturer_Name']}\t"
+                              f"{row['Manufacturer_Address_1']}\n")
 
-    return part_no
+            # Write to Excel using xlsxwriter
+            xlsx_path = os.path.join(out_dir, f"{invoice}.xlsx")
+            with pd.ExcelWriter(xlsx_path, engine='xlsxwriter') as writer:
+                # Write without header at row 1
+                chunk.to_excel(writer, index=False, header=False, startrow=1)
+
+                # Write header manually at row 0
+                workbook  = writer.book
+                worksheet = writer.sheets['Sheet1']
+                header_format = workbook.add_format({
+                    'bold': True,
+                    'font_name': 'Times New Roman',
+                    'font_size': 12,
+                    'align': 'center',
+                    'valign': 'vcenter'
+                })
+
+                for col_idx, col_name in enumerate(template_headers):
+                    worksheet.write(0, col_idx, col_name, header_format)
+
+                # Optional: Adjust column widths for specific columns
+                worksheet.set_column(0, 0, max(len(invoice), len("Invoice_No")) + 2)  # Invoice_No
+                worksheet.set_column(5, 5, 20)  # Column F
+
+            part += 1
+
+    return part
 
 # optional CLI
 if __name__ == "__main__":
