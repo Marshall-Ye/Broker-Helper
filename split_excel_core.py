@@ -102,6 +102,10 @@ def save_chunks(
     """Split df, save XLSX files with plain, left-aligned headers."""
     os.makedirs(out_dir, exist_ok=True)
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    part_list = []
+    for i in range(len(letters)):
+        for j in range(3):
+            part_list.append(letters[i]+str(j+1))
     part_no = 0
 
     plain_font   = Font(name="Calibri", size=11, bold=False)
@@ -111,7 +115,7 @@ def save_chunks(
 
     for start in range(0, len(df), rows_per_file):
         chunk = df.iloc[start:start + rows_per_file].copy()
-        suffix  = letters[part_no]
+        suffix  = part_list[part_no]
         invoice = f"{mawb}-{suffix}"
         chunk["Invoice_No"] = invoice
 
