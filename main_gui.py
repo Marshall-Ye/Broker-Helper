@@ -1,8 +1,9 @@
+# main_gui.py
 """
 GA Broker • Excel Splitter  (CustomTkinter GUI)
 ----------------------------------------------
 • Let user choose source Excel
-• Optional rows‑per‑file (default 499)
+• Optional rows-per-file (default 499)
 • Calls split_excel_core.save_chunks(...)
 • All output is written to ./splitted_excels
 """
@@ -25,7 +26,7 @@ class SplitterUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # ------------- window / icon -------------
+        # window / icon
         self.title("GA Broker • Excel Splitter")
         if os.path.exists(ICON):
             try:
@@ -33,48 +34,41 @@ class SplitterUI(ctk.CTk):
             except Exception:
                 pass
 
-        # ------------- banner -------------
+        # banner
         banner_img = Image.open(BANNER)
         bw, bh = banner_img.size
         ctk.CTkLabel(
             self,
-            image=ctk.CTkImage(light_image=banner_img, dark_image=banner_img,
-                               size=(bw, bh)),
+            image=ctk.CTkImage(light_image=banner_img, dark_image=banner_img, size=(bw, bh)),
             text=""
         ).pack(pady=(10, 20))
 
         self.geometry(f"{bw + 40}x300")
         self.resizable(False, False)
 
-        # ------------- file picker row -------------
+        # file picker row
         row = ctk.CTkFrame(self, fg_color="transparent")
         row.pack(pady=5, fill="x", padx=20)
 
         ctk.CTkLabel(row, text="Source Excel:").pack(side="left", padx=(0, 5))
         self.path_var = ctk.StringVar()
-        ctk.CTkEntry(row, width=bw - 180, textvariable=self.path_var)\
-            .pack(side="left", padx=5)
-        ctk.CTkButton(row, text="Browse…", command=self.browse)\
-            .pack(side="left")
+        ctk.CTkEntry(row, width=bw - 180, textvariable=self.path_var).pack(side="left", padx=5)
+        ctk.CTkButton(row, text="Browse…", command=self.browse).pack(side="left")
 
-        # ------------- rows‑per‑file row -------------
+        # rows-per-file row
         row2 = ctk.CTkFrame(self, fg_color="transparent")
         row2.pack(pady=2, fill="x", padx=20)
         ctk.CTkLabel(row2, text="Rows per file:").pack(side="left", padx=(0, 5))
         self.rows_var = ctk.StringVar(value="499")
-        ctk.CTkEntry(row2, width=120, textvariable=self.rows_var)\
-            .pack(side="left")
+        ctk.CTkEntry(row2, width=120, textvariable=self.rows_var).pack(side="left")
 
-        # ------------- buttons -------------
+        # buttons
         btns = ctk.CTkFrame(self, fg_color="transparent")
         btns.pack(pady=15)
-        self.run_btn = ctk.CTkButton(btns, text="Run", width=120,
-                                     command=self.run_clicked)
+        self.run_btn = ctk.CTkButton(btns, text="Run", width=120, command=self.run_clicked)
         self.run_btn.pack(side="left", padx=10)
-        ctk.CTkButton(btns, text="Exit", width=120,
-                      command=self.destroy).pack(side="left", padx=10)
+        ctk.CTkButton(btns, text="Exit", width=120, command=self.destroy).pack(side="left", padx=10)
 
-    # ========== UI callbacks ==========
     def browse(self):
         file = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
         if file:
@@ -83,25 +77,19 @@ class SplitterUI(ctk.CTk):
     def run_clicked(self):
         src = self.path_var.get()
         if not src:
-            messagebox.showerror("No file selected",
-                                 "Please pick an Excel file.")
+            messagebox.showerror("No file selected", "Please pick an Excel file.")
             return
-
         try:
             rows = int(self.rows_var.get())
             if rows <= 0:
                 raise ValueError
         except ValueError:
-            messagebox.showerror("Invalid number",
-                                 "Rows per file must be a positive integer.")
+            messagebox.showerror("Invalid number", "Rows per file must be a positive integer.")
             return
 
         self.run_btn.configure(state="disabled")
-        threading.Thread(target=self._worker,
-                         args=(src, rows),
-                         daemon=True).start()
+        threading.Thread(target=self._worker, args=(src, rows), daemon=True).start()
 
-    # ------- background thread -------
     def _worker(self, src_path, rows_per_file):
         try:
             mawb = backend.get_mawb(src_path)
@@ -111,21 +99,17 @@ class SplitterUI(ctk.CTk):
         except Exception as exc:
             self.after(0, lambda err=exc: self._error(err))
 
-    # ------- after success -------
     def _done(self, parts):
         self.run_btn.configure(state="normal")
-        messagebox.showinfo("Done",
-                            f"Finished – {parts} file(s) saved to:\n{OUT_DIR}")
+        messagebox.showinfo("Done", f"Finished – {parts} file(s) saved to:\n{OUT_DIR}")
         try:
             os.startfile(OUT_DIR)
         except Exception:
             pass
 
-    # ------- after error -------
     def _error(self, err):
         self.run_btn.configure(state="normal")
         messagebox.showerror("Error", str(err))
-
 
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
