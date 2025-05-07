@@ -1,0 +1,33 @@
+{
+  "config_dir": "C:\\Marshall\\developer_stuff\\Broker-Helper V1.3.1\\.pyupdater",
+  "filename": "C:\\Marshall\\developer_stuff\\Broker-Helper V1.3.1\\.pyupdater\\config.pyu",
+  "count": 0,
+  "app_config": {
+    "APP_NAME": "GABrokerHelper",
+    "CLIENT_CONFIG_PATH": [
+      ".",
+      "client_config.py"
+    ],
+    "COMPANY_NAME": "Golden Arcus",
+    "PLUGIN_CONFIGS": {},
+    "UPDATE_PATCHES": true,
+    "MAX_DOWNLOAD_RETRIES": 3,
+    "HTTP_TIMEOUT": 30,
+    "UPDATE_URLS": [
+      "https://github.com/Marshall-Ye/Broker-Helper/releases/download/"
+    ],
+    "DATA_DIR": "C:\\Marshall\\developer_stuff\\Broker_Helper"
+  },
+  "keypack": {
+    "client": {
+      "offline_public": "/1rhVahzh1mQskp86dXBnaSHQBUnJxBiZpAPkW42bmk"
+    },
+    "repo": {
+      "app_private": "Icf7Yd7mWa0MkyY2aY5VOaFuaUbRxIH5QbX6b8qPHTk"
+    },
+    "upload": {
+      "app_public": "3NZZcYyHORR9MknjlPgovjeuAN6p/HdVg3ueYuyckBQ",
+      "signature": "Eaogo5/8XlNEgLJo+6NId+p4m8CLuxcq7cpQgJANay01JnPK2SfxGhqHBOyUPszY9m0c5yMvDtnDEgiGaGXBBg"
+    }
+  }
+}
