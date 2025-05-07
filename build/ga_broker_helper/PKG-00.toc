@@ -1,6 +1,5 @@
-('D:\\GA T01\\Broker Helper without '
- 'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\GA Broker Helper '
- 'V1.3.pkg',
+('D:\\GA Broker Helper V1.31\\build\\ga_broker_helper\\GA Broker Helper '
+ 'V1.3.1.pkg',
  {'BINARY': True,
   'DATA': True,
   'EXECUTABLE': True,
@@ -12,55 +11,53 @@
   'SYMLINK': False},
  [('pyi-contents-directory _internal', '', 'OPTION'),
   ('PYZ-00.pyz',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\PYZ-00.pyz',
+   'D:\\GA Broker Helper V1.31\\build\\ga_broker_helper\\PYZ-00.pyz',
    'PYZ'),
   ('struct',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\localpycs\\struct.pyc',
+   'D:\\GA Broker Helper V1.31\\build\\ga_broker_helper\\localpycs\\struct.pyc',
    'PYMODULE'),
   ('pyimod01_archive',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\localpycs\\pyimod01_archive.pyc',
+   'D:\\GA Broker Helper '
+   'V1.31\\build\\ga_broker_helper\\localpycs\\pyimod01_archive.pyc',
    'PYMODULE'),
   ('pyimod02_importers',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\localpycs\\pyimod02_importers.pyc',
+   'D:\\GA Broker Helper '
+   'V1.31\\build\\ga_broker_helper\\localpycs\\pyimod02_importers.pyc',
    'PYMODULE'),
   ('pyimod03_ctypes',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\localpycs\\pyimod03_ctypes.pyc',
+   'D:\\GA Broker Helper '
+   'V1.31\\build\\ga_broker_helper\\localpycs\\pyimod03_ctypes.pyc',
    'PYMODULE'),
   ('pyimod04_pywin32',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\build\\ga_broker_helper\\localpycs\\pyimod04_pywin32.pyc',
+   'D:\\GA Broker Helper '
+   'V1.31\\build\\ga_broker_helper\\localpycs\\pyimod04_pywin32.pyc',
    'PYMODULE'),
   ('pyiboot01_bootstrap',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
    'PYSOURCE'),
   ('pyi_rth_inspect',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
-   'PYSOURCE'),
-  ('pyi_rth_setuptools',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
    'PYSOURCE'),
   ('pyi_rth_pkgutil',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
    'PYSOURCE'),
   ('pyi_rth_multiprocessing',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
    'PYSOURCE'),
   ('pyi_rth_pkgres',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgres.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgres.py',
    'PYSOURCE'),
   ('pyi_rth__tkinter',
-   'D:\\GABrokerHelperSource\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
+   'D:\\GA Broker Helper '
+   'V1.31\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
    'PYSOURCE'),
-  ('main_ui',
-   'D:\\GA T01\\Broker Helper without '
-   'MID\\Broker-Helper-new-version\\main_ui.py',
-   'PYSOURCE')],
- 'python313.dll',
+  ('main_ui', 'D:\\GA Broker Helper V1.31\\main_ui.py', 'PYSOURCE')],
+ 'python311.dll',
  True,
  False,
  False,
