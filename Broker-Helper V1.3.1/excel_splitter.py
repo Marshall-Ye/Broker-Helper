@@ -15,7 +15,7 @@ from openpyxl import load_workbook
 
 APP_DIR = os.path.dirname(__file__)
 HEADER_PATH = os.path.join(APP_DIR, "Resources", "ExcelSplitter", "Header Sample.xlsx")
-ROWS_PER_FILE = 998
+ROWS_PER_FILE = 599
 
 HEADERS = [
     "Invoice_No", "Part", "Commercial_Description", "Country_of_Origin", "Country_of_Export",
@@ -86,7 +86,20 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
 
 def save_chunks(df: pd.DataFrame, out_dir: str, mawb: str, rows: int = ROWS_PER_FILE) -> int:
     os.makedirs(out_dir, exist_ok=True)
-    part_list = list(string.ascii_uppercase)
+
+    # ── choose suffix pattern based on rows-per-file ──
+    import string
+    if rows < 600:
+        part_list = [f"{ltr}{i+1}" for ltr in string.ascii_uppercase for i in range(2)]  # A1,A2,B1,B2,...
+    else:
+        part_list = list(string.ascii_uppercase)  # A,B,C,...
+
+    # capacity check
+    if len(df) > rows * len(part_list):
+        raise ValueError("Too many rows for available file parts.")
+
+    # (rest of function is identical)
+
     if len(df) > rows * len(part_list):
         raise ValueError("Too many rows for available file parts.")
 
