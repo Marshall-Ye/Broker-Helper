@@ -140,7 +140,8 @@ class RejectCodeSorterTab:
     def _worker(self):
         try:
             out = read_pdf_to_txt(self.pdf_path)
-            messagebox.showinfo("Done", f"Text file saved to:\n{out}")
+            # instead of a messagebox, just open the .txt:
+            os.startfile(out)
         except Exception as e:
             messagebox.showerror("Error", str(e))
         finally:

@@ -7,12 +7,14 @@ Excel Splitting Backend
 • Expects a valid .xlsx path and splits by 998 rows
 """
 
-import os
+import os, sys
 import re
 import pandas as pd
 from openpyxl import load_workbook
 
-APP_DIR = os.path.dirname(__file__)
+APP_DIR = os.path.dirname(
+    sys.executable if getattr(sys, "frozen", False) else __file__
+    )
 HEADER_PATH = os.path.join(APP_DIR, "Resources", "ExcelSplitter", "Header Sample.xlsx")
 ROWS_PER_FILE = 499
 
@@ -67,8 +69,14 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
         df[HEADERS[xl_idx(tgt)]] = val
 
     mid_c, cntry_c = HEADERS[xl_idx("T")], HEADERS[xl_idx("S")]
+
     sg_mask = df[mid_c].astype(str).str.strip().str.upper().str.startswith("SG", na=False)
     df.loc[sg_mask, cntry_c] = "SG"
+
+    hk_mask = df[mid_c].astype(str).str.strip().str.upper().str.startswith("HK", na=False)
+    df.loc[hk_mask, cntry_c] = "HK"
+
+
 
     def _pad_zip(x):
         if pd.isna(x): return ""
