@@ -6,10 +6,13 @@ from tkinter import filedialog, messagebox
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from PIL import Image
 
+
 import mini_updater as updater
 import excel_splitter as splitter
 from reject_code_sorter import RejectCodeSorterTab
 from pga_reference import PGAReferenceTab
+
+
 
 
 # ─────────────────────────── paths ────────────────────────────
@@ -21,6 +24,7 @@ OUT_DIR  = APP_DIR / "splitted_excels"
 
 BANNER = LOGO_DIR / "company_banner.png"
 ICON   = LOGO_DIR / "company_logo.ico"
+
 
 # ────────────────────── CTk global style ──────────────────────
 ctk.set_appearance_mode("dark")
