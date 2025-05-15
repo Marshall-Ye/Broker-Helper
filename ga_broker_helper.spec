@@ -3,7 +3,7 @@ import os
 from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.building.build_main import Analysis, PYZ, EXE, COLLECT
 
-APP_VERSION = "1.4.7"
+APP_VERSION = "1.4.8"
 DIST_NAME   = f"GA_broker_helper_{APP_VERSION}"
 
 block_cipher = None

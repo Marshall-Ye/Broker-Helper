@@ -3,10 +3,6 @@
    'C:\\Users\\Marshall '
    'Ye\\PycharmProjects\\PythonProject\\.venv\\Lib\\site-packages\\PIL\\__init__.py',
    'PYMODULE'),
-  ('PIL.AvifImagePlugin',
-   'C:\\Users\\Marshall '
-   'Ye\\PycharmProjects\\PythonProject\\.venv\\Lib\\site-packages\\PIL\\AvifImagePlugin.py',
-   'PYMODULE'),
   ('PIL.BlpImagePlugin',
    'C:\\Users\\Marshall '
    'Ye\\PycharmProjects\\PythonProject\\.venv\\Lib\\site-packages\\PIL\\BlpImagePlugin.py',
@@ -230,6 +226,10 @@
   ('PIL.PsdImagePlugin',
    'C:\\Users\\Marshall '
    'Ye\\PycharmProjects\\PythonProject\\.venv\\Lib\\site-packages\\PIL\\PsdImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PyAccess',
+   'C:\\Users\\Marshall '
+   'Ye\\PycharmProjects\\PythonProject\\.venv\\Lib\\site-packages\\PIL\\PyAccess.py',
    'PYMODULE'),
   ('PIL.QoiImagePlugin',
    'C:\\Users\\Marshall '

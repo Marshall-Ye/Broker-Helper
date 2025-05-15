@@ -26,13 +26,16 @@ SIDE_NOTE = {
     "628": "ignore",
     "465": "ignore",
     "523": "fix MID",
-    "771": "add tariff: 9903.01.63",
+    "771": "add tariff: 9903.01.25",
     "794": "add CN",
     "687": "delete the line",
     "483": "calculate MID",
     "775": "delete the line",
     "613": "delete the line",
     "773": "change country to SG",
+    "577": "update line items",
+    "261": "invalid postal code",
+    "995": "ignore"
 }
 
 # ── core logic ───────────────────────────────────────────────
@@ -58,7 +61,9 @@ def read_pdf_to_txt(pdf_path: str) -> str:
             seen.add(mid)
 
     # move 465 just before 628, 628 last
-    ordered_ids = [i for i in ordered_ids if i not in ("465", "628")]
+    ordered_ids = [i for i in ordered_ids if i not in ("465", "628", "995")]
+    if "995" in seen:
+        ordered_ids.append("995")
     if "465" in seen:
         ordered_ids.append("465")
     if "628" in seen:
