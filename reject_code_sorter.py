@@ -46,11 +46,19 @@ def read_pdf_to_txt(pdf_path: str) -> str:
 
     # collect consecutive 'Line#' blocks
     for page in doc:
-        matches = re.findall(r'(Line# \d+\s+\d+)', page.get_text())
-        for m in matches:
-            ln_no = int(re.findall(r'Line# (\d+)\s+\d+', m)[0])
-            if not record_list or ln_no in (record_list[-1][0], record_list[-1][0] + 1):
-                record_list.append([ln_no, m])
+        matche = re.findall(r'(Line# \d+\s+\d+)', page.get_text())
+        index = 0
+        diff = 0
+        ln_pre = 1
+        for m in matche:
+            matches.append(m)
+    while diff<997:
+        ln_no = int(re.findall(r'Line# (\d+)\s+\d+', matches[index])[0])
+        diff = ln_pre-ln_no
+        record_list.append([ln_no, matches[index]])
+        ln_pre = ln_no
+        index += 1
+    record_list.pop(-1)
 
     # preserve first-seen order of IDs
     ordered_ids, seen = [], set()
