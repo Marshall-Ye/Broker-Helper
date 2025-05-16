@@ -52,6 +52,11 @@ def read_pdf_to_txt(pdf_path: str) -> str:
         ln_pre = 1
         for m in matche:
             matches.append(m)
+        matche1 = re.findall(r'Line# \d+\n(\d+)\n', page.get_text())
+        matche2 = re.findall(r'\n(\d+)\n', page.get_text())
+        for m in matche2:
+            if m not in matche1:
+                matches.append("Line# 0\n" + m)
     while diff<997:
         ln_no = int(re.findall(r'Line# (\d+)\s+\d+', matches[index])[0])
         diff = ln_pre-ln_no
