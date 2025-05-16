@@ -43,7 +43,7 @@ def read_pdf_to_txt(pdf_path: str) -> str:
     """Parse *pdf_path* and write an ordered .txt with side-notes."""
     doc = fitz.open(pdf_path)
     record_list = []
-
+    matches = []
     # collect consecutive 'Line#' blocks
     for page in doc:
         matche = re.findall(r'(Line# \d+\s+\d+)', page.get_text())
