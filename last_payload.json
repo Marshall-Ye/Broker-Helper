@@ -6,15 +6,23 @@
           "invoice_number": "369-93302311-A"
         },
         "importer_of_record": {
-          "name": "SHEIN DISTRIBUTION CORPORATION",
+          "name": "GOLDEN ARCUS INTL CO",
           "address": {
-            "address_1": "777 S ALAMEDA ST STE 400"
+            "address_1": "5343 W IMPERIAL HWY NO. 700"
           },
           "city": "LOS ANGELES",
           "region": "CA",
           "country": "US",
-          "postal_code": "90021",
-          "account": "86371698000"
+          "postal_code": "90045",
+          "account": "46275004800"
+        },
+        "terms": {
+          "terms_of_sale": "FOB"
+        },
+        "freight": {
+          "freight_included_in_invoice": true,
+          "charges": "0.00",
+          "currency": "USD"
         }
       },
       "line": {
@@ -17788,7 +17796,7 @@
             "Manufacturer": {
               "Name": "Foshan Nanhai Huaxin Clothing Co., Ltd.",
               "Address": {
-                "Address_1": "2nd Floor, Building D, Yanbu Central Primary School, No. 63, Huaqing Road, Dalï¿½ Town, Nanhai District, Foshan City, Guangdong Province, China"
+                "Address_1": "2nd Floor, Building D, Yanbu Central Primary School, No. 63, Huaqing Road, Dalí Town, Nanhai District, Foshan City, Guangdong Province, China"
               },
               "Mid_code": "CNFOSNAN4710FOS"
             },
@@ -18460,7 +18468,7 @@
             "Manufacturer": {
               "Name": "Xinfeng County Suiyinger Clothing Factory",
               "Address": {
-                "Address_1": "Jiangxi Bank (Ganzhou Xinfeng Branch), No. 290 Yingbin Avenue, Jiadï¿½ng Town, Xinfeng County, Ganzhou City, Jiangxi Province, China"
+                "Address_1": "Jiangxi Bank (Ganzhou Xinfeng Branch), No. 290 Yingbin Avenue, Jiadíng Town, Xinfeng County, Ganzhou City, Jiangxi Province, China"
               },
               "Mid_code": "CNXINCOU290GAN"
             },
@@ -19996,7 +20004,7 @@
             "Manufacturer": {
               "Name": "Foshan Jinbao Garment Co., Ltd.",
               "Address": {
-                "Address_1": "Room 201, 2nd Floor, East District, Nanwan, Wei Ji Fresh Pork Porridge (Dalï¿½ Store), Lixi Xiangji Road, Dalï¿½ Town, Nanhai District, Foshan City, Guangdong Province, China"
+                "Address_1": "Room 201, 2nd Floor, East District, Nanwan, Wei Ji Fresh Pork Porridge (Dalí Store), Lixi Xiangji Road, Dalí Town, Nanhai District, Foshan City, Guangdong Province, China"
               },
               "Mid_code": "CNFOSJIN6541FOS"
             },

@@ -157,13 +157,17 @@ class JsonConverterTab:
 
         # ----- hard-coded importer block -----
         importer = {
-            "name": "SHEIN DISTRIBUTION CORPORATION",
-            "address": {"address_1": "777 S ALAMEDA ST STE 400", "address_2": ""},
+            "name": "GOLDEN ARCUS INTL CO",
+            "address": {
+                "address_1": "5343 W IMPERIAL HWY NO. 700",
+                "address_2": ""
+            },
             "city": "LOS ANGELES",
             "region": "CA",
             "country": "US",
-            "postal_code": "90021",
-            "account": "86371698000",  # EIN 86-3716980-00
+            "postal_code": "90045",
+            # EIN 46-2750048 + suffix 00  →  46275004800  (no dashes)
+            "account": "46275004800",
             "tax_id": "",
             "filer": ""
         }
@@ -215,7 +219,18 @@ class JsonConverterTab:
             "shipment": [{
                 "header": {
                     "general": {"invoice_number": invoice_no},
-                    "importer_of_record": importer
+                    "importer_of_record": importer,
+
+                    # ---- NEW: terms & freight blocks ----
+                    "terms": {
+                        "terms_of_sale": "FOB",
+                        "terms_location": ""
+                    },
+                    "freight": {
+                        "freight_included_in_invoice": True,
+                        "charges": "0.00",
+                        "currency": "USD"
+                    }
                 },
                 "line": {"item": items},
                 "invoice_number": invoice_no,
