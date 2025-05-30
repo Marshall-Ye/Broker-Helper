@@ -13,7 +13,7 @@ from pathlib import Path
 import requests
 
 # ---------------------------------------------------------------------------
-__version__ = "1.4.9"  # 🔁 bump before each release
+__version__ = "1.4.9 SP"  # 🔁 bump before each release
 REPO_API    = "https://api.github.com/repos/Marshall-Ye/Broker-Helper/releases/latest"
 ASSET_PREFIX = "GA_broker_helper_"
 EXE_NAME     = "GA Broker Helper.exe"
