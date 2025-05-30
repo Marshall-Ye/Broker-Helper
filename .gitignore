@@ -1,1 +1,9 @@
-/../AutoClick/
+build/
+dist/
+splitted_excels/
+generated_txts/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.idea/
+keypack.pyu
