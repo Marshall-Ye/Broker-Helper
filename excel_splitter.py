@@ -173,7 +173,7 @@ def save_chunks(
         chunk["Invoice_No"] = invoice
 
         # ─────── bump any Total_Line_Value < 1.00 ───────
-        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 1
+        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.5
         if mask.any():
             # capture ORIGINAL rows for the log *before* modification
             adj_rows.append(chunk.loc[mask].copy())
