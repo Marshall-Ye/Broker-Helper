@@ -172,14 +172,14 @@ def save_chunks(
         invoice = f"{mawb}-{suffix}"
         chunk["Invoice_No"] = invoice
 
-        # ─────── bump any Total_Line_Value < 1.00 ───────
-        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.5
+        # ─────── bump any Total_Line_Value < 0.51 ───────
+        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.51
         if mask.any():
             # capture ORIGINAL rows for the log *before* modification
             adj_rows.append(chunk.loc[mask].copy())
 
             # do the bump
-            chunk.loc[mask, total_col] = 1.00
+            chunk.loc[mask, total_col] = 0.51
 
             # re-calc Unit Price (using bumped total)
             chunk.loc[mask, unit_col] = (
