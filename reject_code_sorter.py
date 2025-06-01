@@ -59,6 +59,8 @@ def read_pdf_to_txt(pdf_path: str) -> str:
             if m not in matche1:
                 matches.append("Line# 0\n" + m)
     while diff<997:
+        if index >= len(matches):
+            break  # Avoid index out of range
         ln_no = int(re.findall(r'Line# (\d+)\s+\d+', matches[index])[0])
         diff = ln_pre-ln_no
         record_list.append([ln_no, matches[index]])
