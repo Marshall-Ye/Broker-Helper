@@ -66,7 +66,8 @@ def read_pdf_to_txt(pdf_path: str) -> str:
         record_list.append([ln_no, matches[index]])
         ln_pre = ln_no
         index += 1
-    record_list.pop(-1)
+    if index < len(matches):
+        record_list.pop(-1) 
 
     # preserve first-seen order of IDs
     ordered_ids, seen = [], set()
