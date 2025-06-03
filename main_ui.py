@@ -60,7 +60,7 @@ class ExcelSplitterTab:
         row_frame = ctk.CTkFrame(parent, fg_color="transparent")
         row_frame.pack(pady=4)
         ctk.CTkLabel(row_frame, text="Rows per file:").pack(side="left", padx=(0, 5))
-        self.rows_var = ctk.StringVar(value="499")
+        self.rows_var = ctk.StringVar(value="495")
         ctk.CTkEntry(row_frame, width=80, textvariable=self.rows_var).pack(side="left")
 
         btns = ctk.CTkFrame(parent, fg_color="transparent")
