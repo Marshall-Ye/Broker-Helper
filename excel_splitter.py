@@ -4,8 +4,11 @@ Excel Splitting Backend
 -----------------------
 • Pure logic only – no GUI
 • Reads an input .xlsx, reshapes the columns and
-  fills Unit_Price = Total_Line_Value / Quantity (2-dec round)
+  – fills Unit_Price = Total_Line_Value / Quantity (2-dec round)
+  – bumps any Total_Line_Value < 1.00 up to 1.00
 • Writes out ≤499-row chunks with a header template
+• Saves <MAWB>_adjusted_rows.xlsx for rows that were bumped
+  (values shown there are the *original* numbers, before bumping)
 """
 
 import os, re, string
@@ -14,10 +17,12 @@ from pathlib import Path
 import pandas as pd
 from openpyxl import load_workbook
 
-# ──────────────── constants ───────────────────────────────────
+import datetime
+
+# ─────────────── constants ────────────────────────────────────
 APP_DIR        = Path(__file__).resolve().parent
 HEADER_PATH    = APP_DIR / "Resources" / "ExcelSplitter" / "Header Sample.xlsx"
-ROWS_PER_FILE  = 499
+ROWS_PER_FILE  = 495
 
 HEADERS = [
     "Invoice_No","Part","Commercial_Description","Country_of_Origin","Country_of_Export",
@@ -66,7 +71,7 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
     # read starting at row 10 (skip first 9 rows)
     raw = pd.read_excel(path, skiprows=9, engine="openpyxl")
 
-    # was there a commodity-description column?  (new layout)
+    # detect commodity-description column (new layout)
     headers  = [str(h).lower() for h in raw.columns]
     has_desc = any("commodity" in h for h in headers)
 
@@ -97,7 +102,7 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
     for tgt, val in CONSTANTS.items():
         df[HEADERS[xl_idx(tgt)]] = val
 
-    # SG / HK country overrides based on MID
+    # SG / HK country overrides based on MID prefix
     mid_c, cntry_c = HEADERS[xl_idx("T")], HEADERS[xl_idx("S")]
     sg_mask = df[mid_c].astype(str).str.upper().str.startswith("SG", na=False)
     hk_mask = df[mid_c].astype(str).str.upper().str.startswith("HK", na=False)
@@ -116,7 +121,7 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
         if zip_col in df.columns:
             df[zip_col] = df[zip_col].apply(_pad_zip)
 
-    # ─────── NEW: calculate Unit_Price  (J / G) ───────
+    # ─────── calculate Unit_Price  (J / G) ───────
     qty_col   = HEADERS[xl_idx("G")]   # Quantity
     total_col = HEADERS[xl_idx("J")]   # Total_Line_Value
     unit_col  = HEADERS[xl_idx("I")]   # Unit_Price
@@ -137,7 +142,11 @@ def save_chunks(
     rows: int = ROWS_PER_FILE
 ) -> int:
     out_dir = Path(out_dir)
-    out_dir.mkdir(exist_ok=True)
+
+    # ── build & create the MAWB-specific folder ──────────────────
+    date_str = datetime.date.today().strftime("%Y-%m-%d")
+    sub_dir  = out_dir / f"GA_CI_{mawb}_{date_str}"
+    sub_dir.mkdir(parents=True, exist_ok=True)
 
     # choose suffix list based on rows-per-file
     if rows < 600:
@@ -148,22 +157,41 @@ def save_chunks(
     if len(df) > rows * len(part_list):
         raise ValueError("Too many rows for available file parts.")
 
+    # header template from sample file
     template_headers = [
         cell.value
         for cell in load_workbook(HEADER_PATH, read_only=True).active[1]
         if cell.value
     ]
 
+    # quick references
+    total_col = HEADERS[xl_idx("J")]   # Total_Line_Value
+    qty_col   = HEADERS[xl_idx("G")]   # Quantity
+    unit_col  = HEADERS[xl_idx("I")]   # Unit_Price
+
+    adj_rows: list[pd.DataFrame] = []   # collect original rows we bump
     part = 0
+
     for start in range(0, len(df), rows):
         chunk   = df.iloc[start : start + rows].copy()
         suffix  = part_list[part]
         invoice = f"{mawb}-{suffix}"
         chunk["Invoice_No"] = invoice
 
-        # reorder to template & write
+        # ─────── bump any Total_Line_Value < 0.51 ───────
+        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.51
+        if mask.any():
+            adj_rows.append(chunk.loc[mask].copy())      # keep originals
+            chunk.loc[mask, total_col] = 0.51            # bump
+            chunk.loc[mask, unit_col] = (
+                pd.to_numeric(chunk.loc[mask, total_col], errors="coerce") /
+                pd.to_numeric(chunk.loc[mask, qty_col],   errors="coerce")
+            ).round(2)
+
+        # ─────── write this split workbook ───────
         chunk = chunk.reindex(columns=template_headers)
-        xlsx_path = out_dir / f"{invoice}.xlsx"
+        file_name = f"GA_CI_{invoice}_{date_str}.xlsx"
+        xlsx_path = sub_dir / file_name
 
         with pd.ExcelWriter(xlsx_path, engine="xlsxwriter") as writer:
             chunk.to_excel(writer, index=False, header=False, startrow=1)
@@ -175,10 +203,21 @@ def save_chunks(
             })
             for idx, title in enumerate(template_headers):
                 ws.write(0, idx, title, fmt)
-
             ws.set_column(0, 0, max(len(invoice), len("Invoice_No")) + 2)
             ws.set_column(5, 5, 20)
 
         part += 1
+
+    # ─────── write adjustment-log workbook ───────
+    if adj_rows:
+        adj_df = pd.concat(adj_rows, ignore_index=True)
+        adj_df = adj_df.reindex(columns=template_headers)
+        adj_df[unit_col] = (
+            pd.to_numeric(adj_df[total_col], errors="coerce") /
+            pd.to_numeric(adj_df[qty_col],   errors="coerce")
+        ).round(2)
+
+        adj_path = sub_dir / f"{mawb}_adjusted_rows.xlsx"
+        adj_df.to_excel(adj_path, index=False)
 
     return part
