@@ -135,25 +135,37 @@ def prepare_dataframe(path: str) -> pd.DataFrame:
 
 
 # ───────────────── save chunks to disk ────────────────────────
+# ───────────────── save chunks to disk ────────────────────────
+# ───────────────── save chunks to disk ────────────────────────
 def save_chunks(
     df: pd.DataFrame,
     out_dir: str | Path,
     mawb: str,
-    rows: int = ROWS_PER_FILE
+    rows: int = ROWS_PER_FILE,
+    *,                           # force kwargs after this
+    enforce_floor: bool = True   # ← checkbox state from GUI
 ) -> int:
+    """
+    Split `df` into ≤rows-per-file workbooks.
+
+    Parameters
+    ----------
+    enforce_floor : bool
+        If True:  bump any Total_Line_Value < $0.51 and log the originals.
+        If False: leave values untouched and **don’t** create the *_ADJUST.xlsx.
+    """
     out_dir = Path(out_dir)
 
-    # ── build MAWB-specific folder ───────────────────────────────
+    # ── build MAWB-specific sub-folder ─────────────────────────
     date_str = datetime.date.today().strftime("%Y-%m-%d")
     sub_dir  = out_dir / f"GA_CI_{mawb}_{date_str}"
     sub_dir.mkdir(parents=True, exist_ok=True)
 
     # suffix list
-    if rows < 600:
-        part_list = [f"{ltr}{i+1}" for ltr in string.ascii_uppercase for i in range(2)]
-    else:
-        part_list = list(string.ascii_uppercase)
-
+    part_list = (
+        [f"{ltr}{i+1}" for ltr in string.ascii_uppercase for i in range(2)]
+        if rows < 600 else list(string.ascii_uppercase)
+    )
     if len(df) > rows * len(part_list):
         raise ValueError("Too many rows for available file parts.")
 
@@ -177,23 +189,25 @@ def save_chunks(
         invoice = f"{mawb}-{suffix}"
         chunk["Invoice_No"] = invoice
 
-        # bump any Total_Line_Value < 0.51
-        mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.51
-        if mask.any():
-            adj_rows.append(chunk.loc[mask].copy())        # originals
-            chunk.loc[mask, total_col] = 0.51               # bump
-            chunk.loc[mask, unit_col] = (
-                pd.to_numeric(chunk.loc[mask, total_col], errors="coerce") /
-                pd.to_numeric(chunk.loc[mask, qty_col],   errors="coerce")
-            ).round(2)
+        # ── optional price bump ────────────────────────────────
+        if enforce_floor:
+            mask = pd.to_numeric(chunk[total_col], errors="coerce") < 0.51
+            if mask.any():
+                adj_rows.append(chunk.loc[mask].copy())       # originals
+                chunk.loc[mask, total_col] = 0.51             # bump
+                chunk.loc[mask, unit_col] = (
+                    pd.to_numeric(chunk.loc[mask, total_col], errors="coerce") /
+                    pd.to_numeric(chunk.loc[mask, qty_col],   errors="coerce")
+                ).round(2)
 
-        # write split workbook
+        # ── write split workbook ──────────────────────────────
         chunk = chunk.reindex(columns=template_headers)
         file_name = f"GA_CI_{invoice}_{date_str}.xlsx"
         xlsx_path = sub_dir / file_name
 
         with pd.ExcelWriter(xlsx_path, engine="xlsxwriter") as writer:
-            chunk.to_excel(writer, index=False, header=False, startrow=1)
+            chunk.to_excel(excel_writer=writer,
+                           index=False, header=False, startrow=1)
             wb  = writer.book
             ws  = writer.sheets["Sheet1"]
             fmt = wb.add_format({
@@ -207,9 +221,13 @@ def save_chunks(
 
         part += 1
 
-    # ── write adjustment workbook (if any) ────────────────────────
-    if adj_rows:
-        adj_df = pd.concat(adj_rows, ignore_index=True).reindex(columns=template_headers)
+    # ── write adjustment workbook (only if we actually bumped) ─
+    if enforce_floor and adj_rows:
+        adj_df = (
+            pd.concat(adj_rows, ignore_index=True)
+              .reindex(columns=template_headers)
+        )
+        # restore original-unit prices in the log
         adj_df[unit_col] = (
             pd.to_numeric(adj_df[total_col], errors="coerce") /
             pd.to_numeric(adj_df[qty_col],   errors="coerce")
@@ -217,6 +235,6 @@ def save_chunks(
 
         adj_name = f"GA_CI_{mawb}-ADJUST_{date_str}.xlsx"
         adj_path = sub_dir / adj_name
-        adj_df.to_excel(adj_path, index=False)
+        adj_df.to_excel(excel_writer=adj_path, index=False)
 
     return part
