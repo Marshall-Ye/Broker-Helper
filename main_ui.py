@@ -19,7 +19,7 @@ import mini_updater as updater
 import excel_splitter as splitter
 from reject_code_sorter import RejectCodeSorterTab
 from pga_reference import PGAReferenceTab
-from json_converter import JsonConverterTab
+from api_ui import JsonConverterTab
 
 
 # ─────────────────────────── helper ────────────────────────────
