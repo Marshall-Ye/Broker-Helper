@@ -36,23 +36,23 @@ def _clean_tariff(v: Any) -> str:
 # ───────── build_entry() is imported by api_ui.py ─────────
 def build_entry(head_row) -> dict:
     """
-    Return a *header-only* Entry Summary payload.
+    Return a header-only Entry Summary.
     `head_row` is the first row of the split Excel (Pandas Series).
     """
     invoice = str(head_row["Invoice_No"]).strip()
 
-    # --- Importer (minimal) ---
+    # ─── Importer (minimal) ───
     importer = {
-        "Account": "SHEI00001",          # <-- static per Magaya
+        "Account": "SHEI00001",
         "Filer":   "D9T",
         "Tax_id":  "86-371698000"
     }
 
-    # --- General block ---
+    # ─── General header block ───
     general = {
         "Invoice_number":        invoice,
         "Invoice_date":          "06/01/2025",
-        "Entry_filing_type":     "01",
+        "entry_filing_type":     "01",
         "Mode_of_transportation":"40",
         "Payment_type":          "7",
 
@@ -81,7 +81,7 @@ def build_entry(head_row) -> dict:
             "QuantityUOM": "CTN",
             "SCAC": "K4",
             "HouseBill": [{
-                "BillNo": invoice[3:],     # strip first 3 chars
+                "BillNo": invoice[3:],
                 "Quantity": 17,
                 "QuantityUOM": "CTN",
                 "SCAC": "K4"
@@ -89,25 +89,22 @@ def build_entry(head_row) -> dict:
         }]
     }
 
-    # --- Parties (new) ---
-    parties = {
-        "Seller":    { "Name": "ROADGET BUSINESS PTE. LTD." },
-        "Consignee": { "Name": "SHEIN DISTRIBUTION CORPORATION" },
-        "Buyer":     { "Name": "SHEIN DISTRIBUTION CORPORATION" }
-    }
+    # ─── Parties (added at SAME level as Importer) ───
+    seller_block = { "Name": "ROADGET BUSINESS PTE. LTD." }
+    shein_block  = { "Name": "SHEIN DISTRIBUTION CORPORATION" }
 
-    # --- Header ---
     header = {
         "Importer_of_record": importer,
-        "General":            general,
-        "Parties":            parties           # <── added here
+        "Seller":    seller_block,
+        "Consignee": shein_block,
+        "Buyer":     shein_block,
+        "General":   general
     }
 
-    # --- No line items yet (empty list) ---
     shipment = {
         "Reference": invoice,
         "Header":    header,
-        "Line":      { "Item": [] }
+        "Line":      { "Item": [] }      # still no line items
     }
 
     return _strip_nans({ "Shipment": [shipment] })
