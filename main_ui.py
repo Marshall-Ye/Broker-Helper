@@ -8,6 +8,7 @@ from PIL import Image
 
 import mini_updater as updater
 import excel_splitter as splitter
+from file_renamer import FileRenamerTab      #  ← new line
 from reject_code_sorter import RejectCodeSorterTab
 from pga_reference import PGAReferenceTab
 # If/when you re-enable the JSON tab, just import & add it here:
@@ -74,7 +75,7 @@ class ExcelSplitterTab:
                      textvariable=self.rows_var).pack(side="left")
 
         # ── NEW: price-adjust checkbox ─────────────────────────
-        self.adjust_var = ctk.BooleanVar(value=True)
+        self.adjust_var = ctk.BooleanVar(value=False)
         ctk.CTkCheckBox(
             parent,
             text="Enforce $0.51 minimum line value",
@@ -174,6 +175,7 @@ class MainApp(TkinterDnD.Tk):
         ExcelSplitterTab(self.tabview.add("Excel Splitter"))
         RejectCodeSorterTab(self.tabview.add("Reject Code Sorter"))
         PGAReferenceTab(self.tabview.add("PGA Reference"))
+        FileRenamerTab(self.tabview.add("File Renamer"))
         # JsonConverterTab(self.tabview.add("JSON Converter"))  # add back if needed
 
         # ── banner bottom-left ───────────────────────────────
